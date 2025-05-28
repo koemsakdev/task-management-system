@@ -1,0 +1,46 @@
+.rbc-header {
+  font-size: 0.875rem;
+  font-weight: normal;
+  padding-bottom: 1rem;
+  color: var(--muted-foreground);
+  border-bottom: 0;
+}
+
+.rbc-header + .rbc-header {
+  @apply border-l-0;
+}
+
+.rbc-button-link {
+  font-family: 0.875rem;
+  font-weight: normal;
+  color: var(--muted-foreground);
+  border-bottom: 0;
+}
+
+.rbc-month-row {
+  @apply min-h-[180px] border-t border-x;
+}
+
+:not(.rbc-month-row ~ .rbc-month-row).rbc-month-row {
+  @apply border-x;
+}
+
+.rbc-month-row:last-of-type {
+  @apply border-b;
+}
+
+.rbc-month-view {
+  @apply border-none;
+}
+
+.rbc-date-cell {
+    padding: o.5rem;
+}
+
+.rgc-today {
+    background: inherit;
+}
+
+.rbc-off-range-bg {
+    background: inherit;
+}
