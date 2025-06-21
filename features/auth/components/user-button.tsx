@@ -1,22 +1,18 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Loader, LogOut } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
-    DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useCurrent } from "@/features/auth/api/use-current";
 import { useLogout } from "@/features/auth/api/use-logout";
-import { Loader, LogOut } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useMemo } from "react";
+import { useCurrent } from "@/features/auth/api/use-current";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 export const UserButton = () => {
     const { data: user, isLoading } = useCurrent();
-    const router = useRouter();
     const { mutate } = useLogout();
     const { name, email } = user || {};
     const avatarFallback = name ? name.charAt(0).toUpperCase() : email?.charAt(0).toUpperCase() ?? "U";
@@ -46,12 +42,9 @@ export const UserButton = () => {
                     <p className="text-xs font-medium text-neutral-500"> {email} </p>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem className="cursor-pointer">Settings</DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">Profile</DropdownMenuItem>
-                <DropdownMenuSeparator />
                 <DropdownMenuItem className="cursor-pointer" onClick={() => mutate()}>
-                    <LogOut className="size-4" />
-                    Logout
+                    <LogOut className="size-4 text-red-500" />
+                    <span className="text-red-500">Logout</span>
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>

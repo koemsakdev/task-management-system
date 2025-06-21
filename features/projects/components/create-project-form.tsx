@@ -62,7 +62,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
         })
     }
 
-    const onHanldeImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onHandleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             form.setValue('image', file)
@@ -116,7 +116,7 @@ export const CreateProjectForm = ({ onCancel }: CreateProjectFormProps) => {
                                                     className="hidden"
                                                     ref={inputRef}
                                                     disabled={isPending}
-                                                    onChange={onHanldeImageChange}
+                                                    onChange={onHandleImageChange}
                                                 />
                                                 {
                                                     !field.value ? (

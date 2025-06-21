@@ -58,19 +58,19 @@ const TaskViewSwitcher = ({ hideProjectFilter }: TaskViewSwitcherProps) => {
         <div className="flex flex-col gap-y-2 lg:flex-row justify-between items-center">
           <TabsList className="w-full lg:w-auto">
             <TabsTrigger
-              className="h-8 w-full lg:w-auto px-4 cursor-pointer rounded-xs"
+              className="h-8 w-full lg:w-auto px-4 cursor-pointer rounded-sm"
               value="table"
             >
               Table
             </TabsTrigger>
             <TabsTrigger
-              className="h-8 w-full lg:w-auto px-4 cursor-pointer rounded-xs"
+              className="h-8 w-full lg:w-auto px-4 cursor-pointer rounded-sm"
               value="kanban"
             >
               Board
             </TabsTrigger>
             <TabsTrigger
-              className="h-8 w-full lg:w-auto px-4 cursor-pointer rounded-xs"
+              className="h-8 w-full lg:w-auto px-4 cursor-pointer rounded-sm"
               value="calendar"
             >
               Calendar
@@ -83,7 +83,7 @@ const TaskViewSwitcher = ({ hideProjectFilter }: TaskViewSwitcherProps) => {
             onClick={open}
           >
             <Plus className="h-4 w-4" />
-            Add Task
+            Create Task
           </Button>
         </div>
         <Separator className="my-4" />

@@ -17,7 +17,7 @@ export async function signUpWithGithub() {
 	);
 
 	return redirect(redirectUrl);
-};
+}
 
 export async function signUpWithGoogle() {
 	const { account } = await createAdminClient();
@@ -31,4 +31,4 @@ export async function signUpWithGoogle() {
 	);
 
 	return redirect(redirectUrl);
-};
+}

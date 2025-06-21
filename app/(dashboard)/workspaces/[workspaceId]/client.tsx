@@ -24,6 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { Card, CardContent } from "@/components/ui/card";
 import { ProjectAvatar } from "@/features/projects/components/project-avatar";
 import { MemberAvatar } from "@/features/members/components/member-avatar";
+import {cn} from "@/lib/utils";
 
 export const WorkspaceIdClient = () => {
   const workspaceId = useWorkspacesId();
@@ -70,53 +71,69 @@ export const TaskList = ({ data, total }: TaskListProps) => {
   const { open: createTask } = useCreateTaskModal();
   return (
     <div className="flex flex-col gap-y-4 col-span-1">
-      <div className="bg-muted rounded-lg p-4">
-        <div className="flex items-center justify-between">
-          <p className="text-lg font-semibold">Tasks ({total})</p>
-          <Button
-            variant="secondary"
-            onClick={createTask}
-            size={"icon"}
-            className="bg-neutral-200 hover:bg-neutral-300"
-          >
-            <Plus className="size-4" />
-          </Button>
-        </div>
-        <Separator className="my-4" />
-        <ul className="flex flex-col gap-y-2">
-          {data.map((task) => (
-            <li key={task.$id}>
-              <Link href={`/workspaces/${workspaceId}/tasks/${task.$id}`}>
-                <Card className="shadow-none border-none rounded-lg hover:opacity-75 transition py-1">
-                  <CardContent className="p-4">
-                    <p className="text-lg font-medium truncate">{task.name}</p>
-                    <div className="flex items-center gap-x-2">
-                      <p>{task.project?.name}</p>
-                      <div className="size-1 rounded-full bg-neutral-300" />
-                      <div className="text-sm text-muted-foreground flex items-center">
-                        <CalendarIcon className="size-4 mr-1" />
-                        <span className="truncate">
-                          {formatDistanceToNow(new Date(task.dueDate))}
-                        </span>
+      <div className="bg-slate-50 h-full rounded-lg p-4 flex flex-col justify-between">
+        <div>
+          <div className="flex items-center justify-between">
+            <p className="text-lg font-semibold">Tasks ({total})</p>
+            <Button
+              variant="secondary"
+              onClick={createTask}
+              size={"icon"}
+              className="bg-neutral-200 hover:bg-neutral-300"
+            >
+              <Plus className="size-4" />
+            </Button>
+          </div>
+          <Separator className="my-4" />
+          <ul className="flex flex-col gap-y-2">
+            {data.map((task) => (
+              <li key={task.$id}>
+                <Link href={`/workspaces/${workspaceId}/tasks/${task.$id}`}>
+                  <Card className="shadow-none border-none rounded-md hover:opacity-75 transition py-1">
+                    <CardContent className="px-4 py-2">
+                      <p className="text-lg font-medium truncate mb-1">{task.name}</p>
+                      <div className="flex items-center gap-x-2">
+                        <p className="text-sm">{task.project?.name}</p>
+                        <div className="h-5 w-[1px] bg-neutral-300" />
+                        <div className="text-sm text-muted-foreground flex items-center">
+                          <CalendarIcon className="size-4 mr-1" />
+                          <span className="truncate">
+                            {formatDistanceToNow(new Date(task.dueDate))}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </Link>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </li>
+            ))}
+            <li className="text-sm text-muted-foreground text-center hidden first-of-type:block">
+              No tasks found
             </li>
-          ))}
-          <li className="text-sm text-muted-foreground text-center hidden first-of-type:block">
-            No tasks found
-          </li>
-          <Button
+          </ul>
+        </div>
+        <Button
             variant={"secondary"}
-            className="mt-2 w-full bg-slate-200 hover:bg-slate-300"
+            className={cn(
+                "mt-2 w-full bg-slate-200 hover:bg-slate-300"
+            )}
+            disabled={data.length === 0}
             size={"sm"}
             asChild
-          >
-            <Link href={`/workspaces/${workspaceId}/tasks`}>Show all</Link>
-          </Button>
-        </ul>
+        >
+          <Link
+              href={data.length === 0 ? "#" : `/workspaces/${workspaceId}/tasks`}
+              className={cn(
+                  "flex items-center justify-center gap-x-2 px-4 py-2 rounded-md text-sm font-medium text-primary hover:bg-slate-300 transition",
+                  data.length === 0 && "opacity-50 pointer-events-none"
+              )}
+              onClick={(e) => {
+                if (data.length === 0) {
+                  e.preventDefault();
+                }
+              }}
+          >Show all</Link>
+        </Button>
       </div>
     </div>
   );
@@ -131,7 +148,7 @@ export const ProjectList = ({ data, total }: ProjectListProps) => {
   const { open: createProject } = useCreateProjectModal();
   return (
     <div className="flex flex-col gap-y-4 col-span-1">
-      <div className="border rounded-lg p-4">
+      <div className="border rounded-lg p-4 h-full">
         <div className="flex items-center justify-between">
           <p className="text-lg font-semibold">Projects ({total})</p>
           <Button
@@ -144,18 +161,21 @@ export const ProjectList = ({ data, total }: ProjectListProps) => {
           </Button>
         </div>
         <Separator className="my-4" />
-        <ul className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+        <ul className={cn(
+            "grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 gap-3",
+            data.length === 0 && "md:grid-cols-1 lg:grid-cols-1 justify-center items-center"
+        )}>
           {data.map((project) => (
-            <li key={project.$id} className="border rounded-lg">
+            <li key={project.$id} className="border-b border-neutral-200 pb-3">
               <Link href={`/workspaces/${workspaceId}/projects/${project.$id}`}>
-                <Card className="shadow-none border-none rounded-lg hover:opacity-75 transition py-1">
-                  <CardContent className="p-4 flex items-center gap-x-2.5">
+                <Card className="shadow-none border-0 rounded-sm hover:opacity-75 transition p-0">
+                  <CardContent className="flex items-center gap-x-2.5 p-0">
                     <ProjectAvatar
                       name={project.name}
                       image={project.imageUrl}
-                      className="size-12 text-lg"
+                      className="size-8 text-lg"
                     />
-                    <p className="text-lg font-medium truncate">
+                    <p className="text-md font-medium truncate">
                       {project.name}
                     </p>
                   </CardContent>
@@ -197,9 +217,9 @@ export const MemberList = ({ data, total }: MemberListProps) => {
         <Separator className="my-4" />
         <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-2">
           {data.map((member) => (
-            <li key={member.$id} className="border rounded-lg">
-              <Card className="shadow-none border-none rounded-lg overflow-hidden">
-                <CardContent className="p-3 flex flex-col items-center gap-x-2">
+            <li key={member.$id} className="border rounded-md">
+              <Card className="shadow-none border-none rounded-lg overflow-hidden p-2 hover:opacity-75 transition">
+                <CardContent className="p-0 flex flex-col items-center gap-x-2">
                   <MemberAvatar
                     name={member.name}
                     className="size-12 text-lg"

@@ -7,7 +7,7 @@ const ProjectIdSettingPage = async () => {
   if (!user) redirect("/sign-in");
 
   return (
-    <div className='w-full lg:max-w-2xl'>
+    <div className='w-full lg:max-w-6xl'>
       <ProjectIdSettingClient />
     </div>
   )

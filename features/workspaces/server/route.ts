@@ -1,22 +1,23 @@
-import { zValidator } from "@hono/zod-validator";
+import { z } from "zod";
 import { Hono } from "hono";
+import { Workspace } from "../type";
+import { ID, Query } from "node-appwrite";
+import { zValidator } from "@hono/zod-validator";
+import { generateInviteCode } from "@/lib/utils";
+import { TaskStatus } from "@/features/tasks/type";
+import { getMember } from "@/features/members/utils";
+import { MemberRole } from "@/features/members/type";
+import { sessionMiddleware } from "@/lib/session-middleware";
+import { endOfMonth, startOfMonth, subMonths } from "date-fns";
 import { updateWorkspaceSchema, workspaceSchema } from "../schemas";
 import {
   DATABASE_ID,
   IMAGES_BUCKET_ID,
   MEMBER_ID,
+  PROJECT_ID,
   TASK_ID,
   WORKSPACE_ID,
 } from "@/config";
-import { ID, Query } from "node-appwrite";
-import { sessionMiddleware } from "@/lib/session-middleware";
-import { MemberRole } from "@/features/members/type";
-import { generateInviteCode } from "@/lib/utils";
-import { getMember } from "@/features/members/utils";
-import { z } from "zod";
-import { Workspace } from "../type";
-import { endOfMonth, startOfMonth, subMonths } from "date-fns";
-import { TaskStatus } from "@/features/tasks/type";
 
 const app = new Hono()
   .get("/", sessionMiddleware, async (c) => {
@@ -76,7 +77,6 @@ const app = new Hono()
   })
   .get("/:workspaceId/info", sessionMiddleware, async (c) => {
     const databases = c.get("databases");
-    const user = c.get("user");
     const { workspaceId } = c.req.param();
 
     const workspace = await databases.getDocument<Workspace>(
@@ -381,7 +381,38 @@ const app = new Hono()
       );
     }
 
+    // Delete workspace
     await databases.deleteDocument(DATABASE_ID, WORKSPACE_ID, workspaceId);
+
+    // Delete all projects in the workspace
+    const projects = await databases.listDocuments(
+      DATABASE_ID,
+      PROJECT_ID,
+      [Query.equal("workspaceId", workspaceId)]
+    );
+    for (const project of projects.documents) {
+      await databases.deleteDocument(DATABASE_ID, PROJECT_ID, project.$id);
+    }
+
+    // Delete all tasks in the workspace
+    const tasks = await databases.listDocuments(
+      DATABASE_ID,
+      TASK_ID,
+      [Query.equal("workspaceId", workspaceId)]
+    );
+    for (const task of tasks.documents) {
+      await databases.deleteDocument(DATABASE_ID, TASK_ID, task.$id);
+    }
+
+    // Delete all members in the workspace
+    const members = await databases.listDocuments(
+      DATABASE_ID,
+      MEMBER_ID,
+      [Query.equal("workspaceId", workspaceId)]
+    );
+    for (const member of members.documents) {
+      await databases.deleteDocument(DATABASE_ID, MEMBER_ID, member.$id);
+    }
 
     return c.json({
       data: { $id: workspaceId },

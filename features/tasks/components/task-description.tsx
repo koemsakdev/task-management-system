@@ -38,6 +38,7 @@ const TaskDescription = ({ task }: TaskDescriptionProps) => {
               ? "bg-blue-200 hover:bg-blue-300 text-blue-600 hover:text-blue-800"
               : "bg-red-200 hover:bg-red-300 text-red-600 hover:text-red-800"
           )}
+          disabled={isPending}
           onClick={() => setIsEditing((prev) => !prev)}
         >
           {isEditing ? <X /> : <Pencil />}
@@ -68,7 +69,7 @@ const TaskDescription = ({ task }: TaskDescriptionProps) => {
       ) : (
         <div>
           {task.description || (
-            <span className="text-muted-foreground">No description set</span>
+            <p className="text-muted-foreground text-center">No description yet</p>
           )}
         </div>
       )}

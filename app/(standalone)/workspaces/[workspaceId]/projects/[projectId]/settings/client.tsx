@@ -17,7 +17,7 @@ const ProjectIdSettingClient = () => {
     return <PageError message="Project not found" />;
   }
   return (
-    <div className="w-full lg:max-w-2xl">
+    <div className="w-full">
       <EditProjectForm initialValues={initialValues} />
     </div>
   );

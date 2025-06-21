@@ -31,11 +31,11 @@ const EventCard = ({
   id,
 }: EventCardProps) => {
     const workspaceId = useWorkspacesId();
-    const rounter = useRouter();
+    const router = useRouter();
 
     const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
         e.stopPropagation();
-        rounter.push(`/workspaces/${workspaceId}/tasks/${id}`);
+        router.push(`/workspaces/${workspaceId}/tasks/${id}`);
     }
   return (
     <div className="px-2">

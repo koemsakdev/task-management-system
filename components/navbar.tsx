@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 
 const pathnameMap  = {
     "tasks": {
-        title: "My Tasks",
+        title: "Tasks",
         description: "View of all your task here."
     },
     "projects": {

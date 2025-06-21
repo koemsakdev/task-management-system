@@ -7,10 +7,8 @@ import { ID, Query } from "node-appwrite";
 import {
   DATABASE_ID,
   IMAGES_BUCKET_ID,
-  MEMBER_ID,
   PROJECT_ID,
   TASK_ID,
-  WORKSPACE_ID,
 } from "@/config";
 import { projectSchema, updateProjectSchema } from "../schema";
 import { Project } from "../type";
@@ -226,6 +224,12 @@ const app = new Hono()
     }
 
     await databases.deleteDocument(DATABASE_ID, PROJECT_ID, projectId);
+    const tasks = await databases.listDocuments(DATABASE_ID, TASK_ID, [
+      Query.equal("projectId", projectId),
+    ]);
+    for (const task of tasks.documents) {
+      await databases.deleteDocument(DATABASE_ID, TASK_ID, task.$id);
+    }
 
     return c.json({
       data: { $id: existingProject.$id },

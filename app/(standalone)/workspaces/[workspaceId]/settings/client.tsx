@@ -7,7 +7,7 @@ import { EditWorkspaceForm } from "@/features/workspaces/components/edit-workspa
 import { useWorkspacesId } from "@/features/workspaces/hooks/use-workspaces-id";
 import React from "react";
 
-const WorksapceIdSettingClient = () => {
+const WorkspaceIdSettingClient = () => {
     const workspaceId = useWorkspacesId();
   const { data: initialValues, isLoading } = useGetWorksapce({ workspaceId });
   if (isLoading) {
@@ -17,10 +17,10 @@ const WorksapceIdSettingClient = () => {
     return <PageError message="Project not found" />;
   }
   return (
-    <div className="w-full lg:max-w-2xl">
+    <div className="w-full">
       <EditWorkspaceForm initialValues={initialValues} />
     </div>
   );
 };
 
-export default WorksapceIdSettingClient;
+export default WorkspaceIdSettingClient;
